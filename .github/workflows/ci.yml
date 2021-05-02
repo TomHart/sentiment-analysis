@@ -11,4 +11,8 @@ jobs:
             -   uses: php-actions/composer@v5
             -   uses: php-actions/phpunit@v2
                 with:
+                    php_extensions: xdebug
                     bootstrap: vendor/autoload.php
+                    args: --coverage-text
+                env:
+                    XDEBUG_MODE: coverage
