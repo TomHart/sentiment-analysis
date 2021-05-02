@@ -3,10 +3,12 @@ name: CI
 on: [ push ]
 
 jobs:
-    build-test:
+    test:
         runs-on: ubuntu-latest
 
         steps:
             -   uses: actions/checkout@v2
             -   uses: php-actions/composer@v5 # or alternative dependency management
             -   uses: php-actions/phpunit@v2
+                with:
+                    configuration: phpunit.xml
