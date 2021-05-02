@@ -1,0 +1,26 @@
+{
+  "name": "tomhart/sentiment-analysis",
+  "description": "S",
+  "type": "library",
+  "require-dev": {
+    "phpunit/phpunit": "^9.5"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Tom Hart",
+      "email": "tom.hart.221@gmail.com"
+    }
+  ],
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "TomHart\\SentimentAnalysis\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "TomHart\\SentimentAnalysis\\Test\\": "test"
+    }
+  }
+}
