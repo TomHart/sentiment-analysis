@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TomHart\SentimentAnalysis\Test\Analyser;
+namespace TomHart\SentimentAnalysis\Tests\Analyser;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
