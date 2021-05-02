@@ -15,12 +15,8 @@
   "require": {},
   "autoload": {
     "psr-4": {
-      "TomHart\\SentimentAnalysis\\": "src"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "TomHart\\SentimentAnalysis\\Test\\": "test"
+      "TomHart\\SentimentAnalysis\\": "src/",
+      "TomHart\\SentimentAnalysis\\Test\\": "test/"
     }
   }
 }

@@ -2,10 +2,13 @@
 
 declare(strict_types=1);
 
-namespace TomHart\SentimentAnalysis\Analyser;
+namespace TomHart\SentimentAnalysis\Test\Analyser;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
+use TomHart\SentimentAnalysis\Analyser\Analyser;
+use TomHart\SentimentAnalysis\Analyser\AnalyserInterface;
+use TomHart\SentimentAnalysis\Analyser\AnalysisResult;
 use TomHart\SentimentAnalysis\Brain\Brain;
 use TomHart\SentimentAnalysis\Brain\BrainInterface;
 use TomHart\SentimentAnalysis\Memories\NoopLoader;
