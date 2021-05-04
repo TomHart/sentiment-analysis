@@ -18,7 +18,6 @@ abstract class AbstractBrain implements BrainInterface
     protected array $sentiments;
     protected array $wordType;
     protected array $sentenceType;
-    protected int $wordCount;
 
     /**
      * @param string $type
