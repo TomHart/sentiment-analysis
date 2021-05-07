@@ -69,6 +69,15 @@ interface BrainInterface
     public function addSentiment(string $word, string $wordType): self;
 
     /**
+     * Add a sentiment as either positive or negative.
+     *
+     * @param string $sentence
+     * @param string $sentenceType
+     * @return $this
+     */
+    public function addSentence(string $sentence, string $sentenceType): self;
+
+    /**
      * Get the count of how many times a sentiment has been classified as positive or negative.
      *
      * @param string $word

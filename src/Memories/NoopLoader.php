@@ -29,9 +29,4 @@ class NoopLoader implements LoaderInterface
     {
         return [SentimentType::POSITIVE => 0, SentimentType::NEGATIVE => 0];
     }
-
-    public function getWordCount(): int
-    {
-        return 0;
-    }
 }

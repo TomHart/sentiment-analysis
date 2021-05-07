@@ -35,11 +35,4 @@ interface LoaderInterface
      */
     #[ArrayShape([SentimentType::POSITIVE => 'int', SentimentType::NEGATIVE => 'int'])]
     public function getSentenceType(): array;
-
-    /**
-     * Get the word count.
-     *
-     * @return int
-     */
-    public function getWordCount(): int;
 }

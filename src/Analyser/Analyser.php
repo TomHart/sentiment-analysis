@@ -70,7 +70,7 @@ class Analyser implements AnalyserInterface
 
         arsort($sentimentScores);
 
-        if (key($sentimentScores) == SentimentType::POSITIVE) {
+        if (key($sentimentScores) === SentimentType::POSITIVE) {
             $bayesDifference = $sentimentScores[SentimentType::POSITIVE] / $sentimentScores[SentimentType::NEGATIVE];
         } else {
             $bayesDifference = $sentimentScores[SentimentType::NEGATIVE] / $sentimentScores[SentimentType::POSITIVE];
@@ -79,7 +79,7 @@ class Analyser implements AnalyserInterface
         $positivity = $sentimentScores[SentimentType::POSITIVE] / ($sentimentScores[SentimentType::POSITIVE] + $sentimentScores[SentimentType::NEGATIVE]);
         $negativity = $sentimentScores[SentimentType::NEGATIVE] / ($sentimentScores[SentimentType::POSITIVE] + $sentimentScores[SentimentType::NEGATIVE]);
 
-        if (in_array(round($bayesDifference, 1), $this->bayesDifference)) {
+        if (in_array(round($bayesDifference, 1), $this->bayesDifference, true)) {
             $sentiment = SentimentType::NEUTRAL;
         } else {
             $sentiment = key($sentimentScores);

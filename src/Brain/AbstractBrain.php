@@ -91,7 +91,6 @@ abstract class AbstractBrain implements BrainInterface
         $this->sentiments = $loader->getSentiments();
         $this->sentenceType = $loader->getSentenceType();
         $this->wordType = $loader->getWordType();
-        $this->wordCount = $loader->getWordCount();
 
         return $this;
     }
@@ -105,23 +104,24 @@ abstract class AbstractBrain implements BrainInterface
      */
     public function insertTrainingData(string $trainingData, string $dataType, int $testDataAmount): BrainInterface
     {
-        if (!in_array($dataType, Analyser::VALID_TYPES)) {
+        if (!in_array($dataType, Analyser::VALID_TYPES, true)) {
             throw new InvalidArgumentException(
                 'Invalid Sentiment Type Encountered: A Sentiment Can Only Be Negative or Positive'
             );
         }
 
         $amountTracker = 0;
-        $testData = fopen($trainingData, 'r');
-        while ($testDatum = fgets($testData)) {
+        $testData = fopen($trainingData, 'rb');
+        while ($sentence = fgets($testData)) {
             if ($amountTracker >= $testDataAmount && $testDataAmount > 0) {
                 break;
             }
 
             $amountTracker++;
-            $words = StrUtils::splitSentence($testDatum);
+            $words = StrUtils::splitSentence($sentence);
 
             $this->incrementSentenceTypeCount($dataType);
+            $this->addSentence($sentence, $dataType);
 
             foreach ($words as $word) {
                 $this->incrementWordTypeCount($dataType);
