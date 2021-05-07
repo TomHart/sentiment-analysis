@@ -7,6 +7,7 @@ namespace TomHart\SentimentAnalysis\Brain;
 use InvalidArgumentException;
 use TomHart\SentimentAnalysis\Analyser\Analyser;
 use TomHart\SentimentAnalysis\Memories\LoaderInterface;
+use TomHart\SentimentAnalysis\SentimentType;
 use TomHart\SentimentAnalysis\StrUtils;
 
 /**
@@ -89,12 +90,26 @@ abstract class AbstractBrain implements BrainInterface
     public function loadMemories(LoaderInterface $loader): BrainInterface
     {
         $this->sentiments = $loader->getSentiments();
-        $this->sentenceType = $loader->getSentenceType();
-        $this->wordType = $loader->getWordType();
+        $this->sentenceType = self::format($loader->getSentenceType());
+        $this->wordType = self::format($loader->getWordType());
 
         return $this;
     }
 
+    /**
+     * @param $data
+     * @return array
+     */
+    public static function format($data): array
+    {
+        return array_merge(
+            [
+                SentimentType::POSITIVE => 0,
+                SentimentType::NEGATIVE => 0
+            ],
+            $data
+        );
+    }
 
     /**
      * @param string $trainingData
@@ -116,6 +131,8 @@ abstract class AbstractBrain implements BrainInterface
             if ($amountTracker >= $testDataAmount && $testDataAmount > 0) {
                 break;
             }
+
+            $sentence = trim($sentence);
 
             $amountTracker++;
             $words = StrUtils::splitSentence($sentence);

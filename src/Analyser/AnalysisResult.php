@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace TomHart\SentimentAnalysis\Analyser;
 
+use JetBrains\PhpStorm\ArrayShape;
+use JsonSerializable;
+use TomHart\SentimentAnalysis\SentimentType;
+
 /**
  * Class AnalysisResult
  * @package TomHart\SentimentAnalysis
  */
-class AnalysisResult
+class AnalysisResult implements JsonSerializable
 {
     private string $result;
     private float $positiveAccuracy;
@@ -87,5 +91,20 @@ class AnalysisResult
     {
         $this->negativeAccuracy = $negativeAccuracy;
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    #[ArrayShape(['result' => 'string', 'accuracy' => 'array'])]
+    public function jsonSerialize(): array
+    {
+        return [
+            'result' => $this->result,
+            'accuracy' => [
+                SentimentType::POSITIVE => $this->positiveAccuracy,
+                SentimentType::NEGATIVE => $this->negativeAccuracy
+            ]
+        ];
     }
 }

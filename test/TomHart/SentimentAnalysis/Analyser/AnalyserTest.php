@@ -19,7 +19,7 @@ class AnalyserTest extends TestCase
 {
     private Analyser $sut;
 
-    public function testImplementsInterface()
+    public function testImplementsInterface(): void
     {
         static::assertInstanceOf(AnalyserInterface::class, $this->sut);
     }
@@ -27,7 +27,7 @@ class AnalyserTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testAnalyzeSentence()
+    public function testAnalyzeSentence(): void
     {
         $brain = $this->createMock(BrainInterface::class);
 
@@ -83,10 +83,6 @@ class AnalyserTest extends TestCase
         $negativeResult = $this->sut->analyse('It was terrible');
         $positiveResult = $this->sut->analyse('It was amazing');
         $neutralResult = $this->sut->analyse('');
-
-        static::assertInstanceOf(AnalysisResult::class, $negativeResult);
-        static::assertInstanceOf(AnalysisResult::class, $positiveResult);
-        static::assertInstanceOf(AnalysisResult::class, $neutralResult);
 
         static::assertEquals(SentimentType::NEGATIVE, $negativeResult->getResult());
         static::assertEquals(SentimentType::POSITIVE, $positiveResult->getResult());

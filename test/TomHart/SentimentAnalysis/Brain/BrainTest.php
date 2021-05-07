@@ -18,7 +18,7 @@ class BrainTest extends TestCase
 {
     private Brain $brain;
 
-    public function testWordType()
+    public function testWordType(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Word type 'neutral' doesn't exist");
@@ -31,14 +31,14 @@ class BrainTest extends TestCase
         $this->brain->getWordTypeCount(SentimentType::NEUTRAL);
     }
 
-    public function testSentiment()
+    public function testSentiment(): void
     {
         self::assertEmpty($this->brain->getSentimentCount('abc', SentimentType::POSITIVE));
         self::assertInstanceOf(Brain::class, $this->brain->addSentiment('abc', SentimentType::POSITIVE));
         self::assertEquals(1, $this->brain->getSentimentCount('abc', SentimentType::POSITIVE));
     }
 
-    public function testSentenceType()
+    public function testSentenceType(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Sentence type 'neutral' doesn't exist");
@@ -54,7 +54,7 @@ class BrainTest extends TestCase
         $this->brain->getSentenceTypeCount(SentimentType::NEUTRAL);
     }
 
-    public function testIncrementSentenceType()
+    public function testIncrementSentenceType(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Sentence type 'neutral' doesn't exist");
@@ -62,7 +62,7 @@ class BrainTest extends TestCase
         $this->brain->incrementSentenceTypeCount(SentimentType::NEUTRAL);
     }
 
-    public function testIncrementWordType()
+    public function testIncrementWordType(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Word type 'neutral' doesn't exist");
@@ -70,21 +70,21 @@ class BrainTest extends TestCase
         $this->brain->incrementWordTypeCount(SentimentType::NEUTRAL);
     }
 
-    public function testSentiments()
+    public function testSentiments(): void
     {
         self::assertEmpty($this->brain->getSentiments());
         self::assertInstanceOf(Brain::class, $this->brain->addSentiment('word', SentimentType::NEUTRAL));
         self::assertCount(1, $this->brain->getSentiments());
     }
 
-    public function testSentenceCount()
+    public function testSentenceCount(): void
     {
         self::assertEquals(0, $this->brain->getSentenceCount());
         self::assertInstanceOf(Brain::class, $this->brain->incrementSentenceTypeCount(SentimentType::POSITIVE));
         self::assertEquals(1, $this->brain->getSentenceCount());
     }
 
-    public function testGetWordCount()
+    public function testGetWordCount(): void
     {
         self::assertEquals(0, $this->brain->getWordCount());
         self::assertInstanceOf(Brain::class, $this->brain->incrementWordTypeCount(SentimentType::POSITIVE));
@@ -106,7 +106,7 @@ class BrainTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testTrainingTheBrain()
+    public function testTrainingTheBrain(): void
     {
         $this->brain->insertTrainingData('trainingSet/data.neg', SentimentType::NEGATIVE, 5000);
         $this->brain->insertTrainingData('trainingSet/data.pos', SentimentType::POSITIVE, 5000);
