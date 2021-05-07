@@ -51,6 +51,10 @@ class Analyser implements AnalyserInterface
      */
     public function analyse(string $string): AnalysisResult
     {
+        if ($this->brain->getSentenceCount() === 0) {
+            return new AnalysisResult(SentimentType::NEUTRAL, 0, 0);
+        }
+
         $this->bayesDistrib = $this->calculateBayesDistribution();
 
         $sentimentScores = [];

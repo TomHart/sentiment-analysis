@@ -50,7 +50,7 @@ class AnalyserTest extends TestCase
             );
 
         $brain
-            ->expects(static::exactly(6))
+            ->expects(static::exactly(9))
             ->method('getSentenceCount')
             ->willReturn(140);
 
@@ -96,6 +96,20 @@ class AnalyserTest extends TestCase
 
         static::assertEquals(0.5, $neutralResult->getPositiveAccuracy());
         static::assertEquals(0.5, $neutralResult->getNegativeAccuracy());
+    }
+
+    public function testUntrainedBrain(): void
+    {
+        $brain = $this->createMock(BrainInterface::class);
+        $brain
+            ->expects(static::once())
+            ->method('getSentenceCount')
+            ->willReturn(0);
+
+        $this->sut->setBrain($brain);
+
+        $neutralResult = $this->sut->analyse('It was terrible');
+        self::assertEquals(new AnalysisResult(SentimentType::NEUTRAL, 0, 0), $neutralResult);
     }
 
     protected function setUp(): void
