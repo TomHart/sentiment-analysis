@@ -110,6 +110,10 @@ class AnalyserTest extends TestCase
 
         $neutralResult = $this->sut->analyse('It was terrible');
         self::assertEquals(new AnalysisResult(SentimentType::NEUTRAL, 0, 0), $neutralResult);
+
+        static::assertEquals(SentimentType::NEUTRAL, $neutralResult->getResult());
+        static::assertEquals(0, $neutralResult->getPositiveAccuracy());
+        static::assertEquals(0, $neutralResult->getNegativeAccuracy());
     }
 
     protected function setUp(): void

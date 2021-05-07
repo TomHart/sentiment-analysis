@@ -30,11 +30,11 @@ class AnalysisResult implements JsonSerializable
             $this->setResult($result);
         }
 
-        if ($positiveAccuracy) {
+        if (!is_null($positiveAccuracy)) {
             $this->setPositiveAccuracy($positiveAccuracy);
         }
 
-        if ($negativeAccuracy) {
+        if (!is_null($negativeAccuracy)) {
             $this->setNegativeAccuracy($negativeAccuracy);
         }
     }
