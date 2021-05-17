@@ -30,9 +30,12 @@ class Analyser implements AnalyserInterface
     /**
      * Analyzer constructor.
      */
-    public function __construct()
+    public function __construct(BrainInterface $brain = null)
     {
         $this->bayesDifference = range(-1.0, 1.5, 0.1);
+        if (!is_null($brain)) {
+            $this->brain = $brain;
+        }
     }
 
     /**

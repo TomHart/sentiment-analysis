@@ -6,6 +6,7 @@ namespace TomHart\SentimentAnalysis\Brain;
 
 use InvalidArgumentException;
 use TomHart\SentimentAnalysis\Analyser\Analyser;
+use TomHart\SentimentAnalysis\Exception\InvalidSentimentTypeException;
 use TomHart\SentimentAnalysis\Memories\LoaderInterface;
 use TomHart\SentimentAnalysis\SentimentType;
 use TomHart\SentimentAnalysis\StrUtils;
@@ -19,6 +20,7 @@ abstract class AbstractBrain implements BrainInterface
     protected array $sentiments;
     protected array $wordType;
     protected array $sentenceType;
+    protected array $stopWords = StopWords::ENGLISH;
 
     /**
      * @param string $type
@@ -119,12 +121,6 @@ abstract class AbstractBrain implements BrainInterface
      */
     public function insertTrainingData(string $trainingData, string $dataType, int $testDataAmount): BrainInterface
     {
-        if (!in_array($dataType, Analyser::VALID_TYPES, true)) {
-            throw new InvalidArgumentException(
-                'Invalid Sentiment Type Encountered: A Sentiment Can Only Be Negative or Positive'
-            );
-        }
-
         $amountTracker = 0;
         $testData = fopen($trainingData, 'rb');
         while ($sentence = fgets($testData)) {
@@ -132,20 +128,53 @@ abstract class AbstractBrain implements BrainInterface
                 break;
             }
 
-            $sentence = trim($sentence);
-
             $amountTracker++;
-            $words = StrUtils::splitSentence($sentence);
-
-            $this->incrementSentenceTypeCount($dataType);
-            $this->addSentence($sentence, $dataType);
-
-            foreach ($words as $word) {
-                $this->incrementWordTypeCount($dataType);
-                $this->addSentiment($word, $dataType);
-            }
+            $this->insertTrainingSentence($sentence, $dataType);
         }
 
+        return $this;
+    }
+
+    /**
+     * @param string $sentence
+     * @param string $dataType
+     * @return BrainInterface
+     */
+    public function insertTrainingSentence(string $sentence, string $dataType): BrainInterface
+    {
+        if (!in_array($dataType, Analyser::VALID_TYPES, true)) {
+            throw new InvalidSentimentTypeException(
+                'Invalid sentiment type encountered: A sentiment can only be negative or positive'
+            );
+        }
+
+        $sentence = trim($sentence);
+
+        $words = StrUtils::splitSentence($sentence);
+
+        $this->incrementSentenceTypeCount($dataType);
+        $this->addSentence($sentence, $dataType);
+
+        foreach ($words as $word) {
+            if (in_array(mb_strtolower($word), $this->stopWords, true)) {
+                continue;
+            }
+
+            $this->incrementWordTypeCount($dataType);
+            $this->addSentiment($word, $dataType);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the stop words for the brain to ignore when training
+     * @param array $stopWords
+     * @return $this
+     */
+    public function setStopWords(array $stopWords): BrainInterface
+    {
+        $this->stopWords = array_map('mb_strtolower', $stopWords);
         return $this;
     }
 }

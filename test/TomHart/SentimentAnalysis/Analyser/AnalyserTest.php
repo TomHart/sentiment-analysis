@@ -116,12 +116,16 @@ class AnalyserTest extends TestCase
         static::assertEquals(0, $neutralResult->getNegativeAccuracy());
     }
 
+    public function testBrainCanBeSet(): void
+    {
+        self::assertInstanceOf(AnalyserInterface::class, $this->sut->setBrain(new Brain()));
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
-        $this->sut = new Analyser();
         $brain = new Brain();
         $brain->loadMemories(new NoopLoader());
-        $this->sut->setBrain($brain);
+        $this->sut = new Analyser($brain);
     }
 }

@@ -110,4 +110,18 @@ interface BrainInterface
      * @return $this
      */
     public function insertTrainingData(string $trainingData, string $dataType, int $testDataAmount): self;
+
+    /**
+     * @param string $sentence
+     * @param string $dataType
+     * @return BrainInterface
+     */
+    public function insertTrainingSentence(string $sentence, string $dataType): self;
+
+    /**
+     * Set the stop words for the brain to ignore when training
+     * @param array $stopWords
+     * @return $this
+     */
+    public function setStopWords(array $stopWords): self;
 }

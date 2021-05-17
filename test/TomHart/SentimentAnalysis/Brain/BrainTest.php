@@ -7,6 +7,7 @@ namespace TomHart\SentimentAnalysis\Brain;
 use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use TomHart\SentimentAnalysis\Exception\InvalidSentimentTypeException;
 use TomHart\SentimentAnalysis\Memories\NoopLoader;
 use TomHart\SentimentAnalysis\SentimentType;
 
@@ -96,11 +97,8 @@ class BrainTest extends TestCase
      */
     public function testInvalidSentimentType(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(
-            'Invalid Sentiment Type Encountered: A Sentiment Can Only Be Negative or Positive'
-        );
-        $this->brain->insertTrainingData('', 'something_else', 1);
+        $this->expectException(InvalidSentimentTypeException::class);
+        $this->brain->insertTrainingData('trainingSet/data.neg', 'something_else', 1);
     }
 
     /**
@@ -118,6 +116,22 @@ class BrainTest extends TestCase
         static::assertEquals(5000, $this->brain->getSentenceTypeCount(SentimentType::NEGATIVE));
         static::assertEquals(193638, $this->brain->getWordCount());
         static::assertEquals(10000, $this->brain->getSentenceCount());
+    }
+
+    public function testStopWords(): void
+    {
+        self::assertSame($this->brain, $this->brain->setStopWords(['this', 'then', 'and', 'of']));
+
+        $this->brain->insertTrainingSentence('this good then excellent and', SentimentType::POSITIVE);
+        $this->brain->insertTrainingSentence('this bad then rubbish and', SentimentType::NEGATIVE);
+
+        static::assertCount(4, $this->brain->getSentiments());
+        static::assertEquals(2, $this->brain->getWordTypeCount(SentimentType::POSITIVE));
+        static::assertEquals(2, $this->brain->getWordTypeCount(SentimentType::NEGATIVE));
+        static::assertEquals(1, $this->brain->getSentenceTypeCount(SentimentType::POSITIVE));
+        static::assertEquals(1, $this->brain->getSentenceTypeCount(SentimentType::NEGATIVE));
+        static::assertEquals(4, $this->brain->getWordCount());
+        static::assertEquals(2, $this->brain->getSentenceCount());
     }
 
     protected function setUp(): void

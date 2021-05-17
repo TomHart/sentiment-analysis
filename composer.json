@@ -12,7 +12,9 @@
       "email": "tom.hart.221@gmail.com"
     }
   ],
-  "require": {},
+  "require": {
+      "ext-mbstring": "*"
+  },
   "autoload": {
     "psr-4": {
       "TomHart\\SentimentAnalysis\\": "src"
