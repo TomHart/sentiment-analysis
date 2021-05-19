@@ -61,6 +61,7 @@ class Analyser implements AnalyserInterface
         $this->bayesDistrib = $this->calculateBayesDistribution();
 
         $sentimentScores = [];
+        $workings = [];
 
         $words = StrUtils::splitSentence($string);
 
@@ -68,13 +69,18 @@ class Analyser implements AnalyserInterface
             $sentimentScores[$type] = 1;
 
             foreach ($words as $word) {
-                if(empty($word) || $this->brain->isStopWord($word)){
+                if (empty($word) || $this->brain->isStopWord($word)) {
                     continue;
                 }
 
                 $tracker = $this->brain->getSentimentCount($word, $type);
                 $wordCount = ($this->brain->getWordTypeCount($type) + $this->brain->getWordCount());
                 $sentimentScores[$type] *= ($tracker + 1) / $wordCount;
+                $workings[$word][$type] = [
+                    sprintf('times_word_used_in_%s_context', $type) => $tracker + 1,
+                    sprintf('total_words_plus_%s_words', $type) => $wordCount,
+                    'score' => ($tracker + 1) / $wordCount
+                ];
             }
             $sentimentScores[$type] *= $this->bayesDistrib[$type];
         }
@@ -96,7 +102,7 @@ class Analyser implements AnalyserInterface
             $sentiment = key($sentimentScores);
         }
 
-        return new AnalysisResult($sentiment, $positivity, $negativity);
+        return new AnalysisResult($sentiment, $positivity, $negativity, $workings);
     }
 
     /**

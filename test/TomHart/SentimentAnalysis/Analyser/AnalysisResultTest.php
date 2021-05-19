@@ -15,7 +15,7 @@ class AnalysisResultTest extends TestCase
 {
     public function testConstructor(): void
     {
-        $result = new AnalysisResult(SentimentType::POSITIVE, 1, 2);
+        $result = new AnalysisResult(SentimentType::POSITIVE, 1, 2, ['a' => 'b']);
         self::assertEquals(SentimentType::POSITIVE, $result->getResult());
         self::assertEquals(1, $result->getPositiveAccuracy());
         self::assertEquals(2, $result->getNegativeAccuracy());
@@ -29,6 +29,7 @@ class AnalysisResultTest extends TestCase
             ],
             $result->jsonSerialize()
         );
+        self::assertSame(['a' => 'b'], $result->getWorkings());
     }
 
     public function testResult(): void

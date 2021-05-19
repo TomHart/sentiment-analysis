@@ -17,6 +17,7 @@ class AnalysisResult implements JsonSerializable
     private string $result;
     private float $positiveAccuracy;
     private float $negativeAccuracy;
+    private array $workings;
 
     /**
      * AnalysisResult constructor.
@@ -24,8 +25,12 @@ class AnalysisResult implements JsonSerializable
      * @param float|null $positiveAccuracy
      * @param float|null $negativeAccuracy
      */
-    public function __construct(string $result = null, float $positiveAccuracy = null, float $negativeAccuracy = null)
-    {
+    public function __construct(
+        string $result = null,
+        float $positiveAccuracy = null,
+        float $negativeAccuracy = null,
+        array $workings = null
+    ) {
         if ($result) {
             $this->setResult($result);
         }
@@ -36,6 +41,10 @@ class AnalysisResult implements JsonSerializable
 
         if (!is_null($negativeAccuracy)) {
             $this->setNegativeAccuracy($negativeAccuracy);
+        }
+
+        if (!is_null($workings)) {
+            $this->setWorkings($workings);
         }
     }
 
@@ -90,6 +99,24 @@ class AnalysisResult implements JsonSerializable
     public function setNegativeAccuracy(float $negativeAccuracy): AnalysisResult
     {
         $this->negativeAccuracy = $negativeAccuracy;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getWorkings(): array
+    {
+        return $this->workings;
+    }
+
+    /**
+     * @param array $workings
+     * @return AnalysisResult
+     */
+    public function setWorkings(array $workings): AnalysisResult
+    {
+        $this->workings = $workings;
         return $this;
     }
 
