@@ -168,6 +168,14 @@ abstract class AbstractBrain implements BrainInterface
     }
 
     /**
+     * @return string[]
+     */
+    public function getStopWords(): array
+    {
+        return $this->stopWords;
+    }
+
+    /**
      * Set the stop words for the brain to ignore when training
      * @param array $stopWords
      * @return $this
@@ -176,5 +184,15 @@ abstract class AbstractBrain implements BrainInterface
     {
         $this->stopWords = array_map('mb_strtolower', $stopWords);
         return $this;
+    }
+
+    /**
+     * Is the given word a stop word?
+     * @param string $word
+     * @return bool
+     */
+    public function isStopWord(string $word): bool
+    {
+        return in_array(mb_strtolower($word), $this->stopWords, true);
     }
 }

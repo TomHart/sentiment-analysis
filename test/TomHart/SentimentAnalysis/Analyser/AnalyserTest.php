@@ -55,28 +55,32 @@ class AnalyserTest extends TestCase
             ->willReturn(140);
 
         $brain
-            ->expects(static::exactly(12))
+            ->expects(static::exactly(4))
             ->method('getSentimentCount')
             ->withConsecutive(
-                ['It', SentimentType::POSITIVE],
-                ['was', SentimentType::POSITIVE],
                 ['terrible', SentimentType::POSITIVE],
-                ['It', SentimentType::NEGATIVE],
-                ['was', SentimentType::NEGATIVE],
                 ['terrible', SentimentType::NEGATIVE],
-                ['It', SentimentType::POSITIVE],
-                ['was', SentimentType::POSITIVE],
                 ['amazing', SentimentType::POSITIVE],
-                ['It', SentimentType::NEGATIVE],
-                ['was', SentimentType::NEGATIVE],
                 ['amazing', SentimentType::NEGATIVE],
             )
-            ->willReturnOnConsecutiveCalls(0, 0, 0, 0, 0, 10, 0, 0, 20, 0, 0, 0);
+            ->willReturnOnConsecutiveCalls(0, 10, 10, 0);
+
+        $brain
+            ->expects(static::exactly(4))
+            ->method('getWordCount')
+            ->willReturn(1000);
 
         $brain
             ->expects(static::exactly(12))
-            ->method('getWordCount')
-            ->willReturn(1000);
+            ->method('isStopWord')
+            ->willReturnMap(
+                [
+                    ['It', true],
+                    ['was', true],
+                    ['terrible', false],
+                    ['amazing', false],
+                ]
+            );
 
         $this->sut->setBrain($brain);
 
@@ -91,8 +95,8 @@ class AnalyserTest extends TestCase
         static::assertEquals(0.083333333333333, $negativeResult->getPositiveAccuracy());
         static::assertEquals(0.91666666666667, $negativeResult->getNegativeAccuracy());
 
-        static::assertEquals(0.95454545454545, $positiveResult->getPositiveAccuracy());
-        static::assertEquals(0.045454545454545, $positiveResult->getNegativeAccuracy());
+        static::assertEquals(0.91666666666667, $positiveResult->getPositiveAccuracy());
+        static::assertEquals(0.083333333333333, $positiveResult->getNegativeAccuracy());
 
         static::assertEquals(0.5, $neutralResult->getPositiveAccuracy());
         static::assertEquals(0.5, $neutralResult->getNegativeAccuracy());

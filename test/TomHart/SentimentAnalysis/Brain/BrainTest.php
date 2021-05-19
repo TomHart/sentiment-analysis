@@ -109,18 +109,22 @@ class BrainTest extends TestCase
         $this->brain->insertTrainingData('trainingSet/data.neg', SentimentType::NEGATIVE, 5000);
         $this->brain->insertTrainingData('trainingSet/data.pos', SentimentType::POSITIVE, 5000);
 
-        static::assertCount(17812, $this->brain->getSentiments());
-        static::assertEquals(96798, $this->brain->getWordTypeCount(SentimentType::POSITIVE));
-        static::assertEquals(96840, $this->brain->getWordTypeCount(SentimentType::NEGATIVE));
+        static::assertCount(17686, $this->brain->getSentiments());
+        static::assertEquals(54786, $this->brain->getWordTypeCount(SentimentType::POSITIVE));
+        static::assertEquals(54037, $this->brain->getWordTypeCount(SentimentType::NEGATIVE));
         static::assertEquals(5000, $this->brain->getSentenceTypeCount(SentimentType::POSITIVE));
         static::assertEquals(5000, $this->brain->getSentenceTypeCount(SentimentType::NEGATIVE));
-        static::assertEquals(193638, $this->brain->getWordCount());
+        static::assertEquals(108823, $this->brain->getWordCount());
         static::assertEquals(10000, $this->brain->getSentenceCount());
     }
 
     public function testStopWords(): void
     {
-        self::assertSame($this->brain, $this->brain->setStopWords(['this', 'then', 'and', 'of']));
+        $words = ['this', 'then', 'and', 'OF'];
+        self::assertSame($this->brain, $this->brain->setStopWords($words));
+        self::assertSame(['this', 'then', 'and', 'of'], $this->brain->getStopWords());
+        self::assertTrue($this->brain->isStopWord('this'));
+        self::assertTrue($this->brain->isStopWord('THIS'));
 
         $this->brain->insertTrainingSentence('this good then excellent and', SentimentType::POSITIVE);
         $this->brain->insertTrainingSentence('this bad then rubbish and', SentimentType::NEGATIVE);

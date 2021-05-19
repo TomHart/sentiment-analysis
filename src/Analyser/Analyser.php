@@ -68,6 +68,10 @@ class Analyser implements AnalyserInterface
             $sentimentScores[$type] = 1;
 
             foreach ($words as $word) {
+                if(empty($word) || $this->brain->isStopWord($word)){
+                    continue;
+                }
+
                 $tracker = $this->brain->getSentimentCount($word, $type);
                 $wordCount = ($this->brain->getWordTypeCount($type) + $this->brain->getWordCount());
                 $sentimentScores[$type] *= ($tracker + 1) / $wordCount;

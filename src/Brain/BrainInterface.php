@@ -124,4 +124,17 @@ interface BrainInterface
      * @return $this
      */
     public function setStopWords(array $stopWords): self;
+
+    /**
+     * Return the configured stop words.
+     * @return array
+     */
+    public function getStopWords(): array;
+
+    /**
+     * Is the given word a stop word?
+     * @param string $word
+     * @return bool
+     */
+    public function isStopWord(string $word): bool;
 }
