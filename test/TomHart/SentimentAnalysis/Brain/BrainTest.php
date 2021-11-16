@@ -7,6 +7,7 @@ namespace TomHart\SentimentAnalysis\Brain;
 use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use TomHart\SentimentAnalysis\Analyser\Analyser;
 use TomHart\SentimentAnalysis\Exception\InvalidSentimentTypeException;
 use TomHart\SentimentAnalysis\Memories\NoopLoader;
 use TomHart\SentimentAnalysis\SentimentType;
@@ -143,5 +144,18 @@ class BrainTest extends TestCase
         parent::setUp();
         $this->brain = new Brain();
         $this->brain->loadMemories(new NoopLoader());
+    }
+
+    public function testExample(){
+        $brain = new Brain();
+
+// Train the brain.
+        $brain->insertTrainingSentence('This is a good sentence', SentimentType::POSITIVE);
+
+// Create an analyser.
+        $analyser = new Analyser($brain);
+
+// Test it on a sentence.
+        $result = $analyser->analyse('The experience I had was good');
     }
 }

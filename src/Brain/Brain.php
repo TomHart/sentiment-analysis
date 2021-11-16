@@ -10,7 +10,7 @@ use InvalidArgumentException;
  * Class Brain
  * @package TomHart\SentimentAnalysis
  */
-class Brain extends AbstractBrain
+class Brain extends AbstractBrain implements \Serializable
 {
     /**
      * @param string $sentenceType
@@ -62,5 +62,21 @@ class Brain extends AbstractBrain
     public function addSentence(string $sentence, string $sentenceType): BrainInterface
     {
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function serialize(): string
+    {
+
+    }
+
+    /**
+     * @param string $data
+     */
+    public function unserialize($data): void
+    {
+
     }
 }

@@ -17,9 +17,22 @@ use TomHart\SentimentAnalysis\StrUtils;
  */
 abstract class AbstractBrain implements BrainInterface
 {
+    /** @var array Words listed how many good/bad times they were used */
     protected array $sentiments;
-    protected array $wordType;
-    protected array $sentenceType;
+
+    /** @var array How many positive/negative words there are */
+    protected array $wordType = [
+        SentimentType::POSITIVE => 0,
+        SentimentType::NEGATIVE => 0
+    ];
+
+    /** @var array How many positive/negative words there are */
+    protected array $sentenceType = [
+        SentimentType::POSITIVE => 0,
+        SentimentType::NEGATIVE => 0
+    ];
+
+    /** @var array|string[] List of stop words */
     protected array $stopWords = StopWords::ENGLISH;
 
     /**
