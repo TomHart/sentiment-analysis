@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TomHart\SentimentAnalysis\Brain;
 
-use TomHart\SentimentAnalysis\Memories\LoaderInterface;
+use TomHart\SentimentAnalysis\SentimentType;
 
 /**
  * Brain Interface
@@ -16,34 +16,34 @@ interface BrainInterface
      * When training the brain, increment the number
      * of training sentences are positive or negative
      *
-     * @param string $sentenceType
+     * @param SentimentType $sentenceType
      * @return $this
      */
-    public function incrementSentenceTypeCount(string $sentenceType): self;
+    public function incrementSentenceTypeCount(SentimentType $sentenceType): self;
 
     /**
      * Get how many sentences from training were positive or negative.
      *
-     * @param string $type
+     * @param SentimentType $type
      * @return int
      */
-    public function getSentenceTypeCount(string $type): int;
+    public function getSentenceTypeCount(SentimentType $type): int;
 
     /**
      * Increment the number of either positive or negative words that have been trained.
      *
-     * @param string $wordType
+     * @param SentimentType $wordType
      * @return $this
      */
-    public function incrementWordTypeCount(string $wordType): self;
+    public function incrementWordTypeCount(SentimentType $wordType): self;
 
     /**
      * Get the number of positive/negative trained words.
      *
-     * @param string $type
+     * @param SentimentType $type
      * @return int
      */
-    public function getWordTypeCount(string $type): int;
+    public function getWordTypeCount(SentimentType $type): int;
 
     /**
      * Get how many sentences have been trained.
@@ -60,81 +60,36 @@ interface BrainInterface
     public function getWordCount(): int;
 
     /**
-     * Add a sentiment as either positive or negative.
+     * Add a sentiment as either positive or negative. In this
      *
      * @param string $word
-     * @param string $wordType
+     * @param SentimentType $wordType
      * @return $this
      */
-    public function addSentiment(string $word, string $wordType): self;
+    public function addWord(string $word, SentimentType $wordType): self;
 
     /**
      * Add a sentiment as either positive or negative.
      *
      * @param string $sentence
-     * @param string $sentenceType
+     * @param SentimentType $sentenceType
      * @return $this
      */
-    public function addSentence(string $sentence, string $sentenceType): self;
+    public function addSentence(string $sentence, SentimentType $sentenceType): self;
 
     /**
      * Get the count of how many times a sentiment has been classified as positive or negative.
      *
      * @param string $word
-     * @param string $wordType
+     * @param SentimentType $wordType
      * @return int
      */
-    public function getSentimentCount(string $word, string $wordType): int;
+    public function getWordUsageCount(string $word, SentimentType $wordType): int;
 
     /**
      * Get all the trained sentiments.
      *
      * @return array
      */
-    public function getSentiments(): array;
-
-    /**
-     * Load the brains data in.
-     *
-     * @param LoaderInterface $loader
-     * @return $this
-     */
-    public function loadMemories(LoaderInterface $loader): self;
-
-    /**
-     * Adds a new string as training data.
-     *
-     * @param string $trainingData
-     * @param string $dataType
-     * @param int $testDataAmount
-     * @return $this
-     */
-    public function insertTrainingData(string $trainingData, string $dataType, int $testDataAmount): self;
-
-    /**
-     * @param string $sentence
-     * @param string $dataType
-     * @return BrainInterface
-     */
-    public function insertTrainingSentence(string $sentence, string $dataType): self;
-
-    /**
-     * Set the stop words for the brain to ignore when training
-     * @param array $stopWords
-     * @return $this
-     */
-    public function setStopWords(array $stopWords): self;
-
-    /**
-     * Return the configured stop words.
-     * @return array
-     */
-    public function getStopWords(): array;
-
-    /**
-     * Is the given word a stop word?
-     * @param string $word
-     * @return bool
-     */
-    public function isStopWord(string $word): bool;
+    public function getWords(): array;
 }

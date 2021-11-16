@@ -29,7 +29,7 @@ class AnalyserTest extends TestCase
      */
     public function testAnalyzeSentence(): void
     {
-        $brain = $this->createMock(BrainInterface::class);
+        $brain = $this->createMock(Brain::class);
 
         $brain
             ->expects(static::exactly(6))
@@ -41,11 +41,11 @@ class AnalyserTest extends TestCase
                 )
             )
             ->willReturnCallback(
-                static function (string $arg) {
+                static function (SentimentType $arg) {
                     return [
-                        SentimentType::POSITIVE => 70,
-                        SentimentType::NEGATIVE => 70
-                    ][$arg];
+                        SentimentType::POSITIVE->value => 70,
+                        SentimentType::NEGATIVE->value => 70
+                    ][$arg->value];
                 }
             );
 
@@ -56,7 +56,7 @@ class AnalyserTest extends TestCase
 
         $brain
             ->expects(static::exactly(4))
-            ->method('getSentimentCount')
+            ->method('getWordUsageCount')
             ->withConsecutive(
                 ['terrible', SentimentType::POSITIVE],
                 ['terrible', SentimentType::NEGATIVE],

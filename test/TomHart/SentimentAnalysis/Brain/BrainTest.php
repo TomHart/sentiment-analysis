@@ -35,9 +35,9 @@ class BrainTest extends TestCase
 
     public function testSentiment(): void
     {
-        self::assertEmpty($this->brain->getSentimentCount('abc', SentimentType::POSITIVE));
-        self::assertInstanceOf(Brain::class, $this->brain->addSentiment('abc', SentimentType::POSITIVE));
-        self::assertEquals(1, $this->brain->getSentimentCount('abc', SentimentType::POSITIVE));
+        self::assertEmpty($this->brain->getWordUsageCount('abc', SentimentType::POSITIVE));
+        self::assertInstanceOf(Brain::class, $this->brain->addWord('abc', SentimentType::POSITIVE));
+        self::assertEquals(1, $this->brain->getWordUsageCount('abc', SentimentType::POSITIVE));
     }
 
     public function testSentenceType(): void
@@ -74,9 +74,9 @@ class BrainTest extends TestCase
 
     public function testSentiments(): void
     {
-        self::assertEmpty($this->brain->getSentiments());
-        self::assertInstanceOf(Brain::class, $this->brain->addSentiment('word', SentimentType::NEUTRAL));
-        self::assertCount(1, $this->brain->getSentiments());
+        self::assertEmpty($this->brain->getWords());
+        self::assertInstanceOf(Brain::class, $this->brain->addWord('word', SentimentType::NEUTRAL));
+        self::assertCount(1, $this->brain->getWords());
     }
 
     public function testSentenceCount(): void
@@ -110,7 +110,7 @@ class BrainTest extends TestCase
         $this->brain->insertTrainingData('trainingSet/data.neg', SentimentType::NEGATIVE, 5000);
         $this->brain->insertTrainingData('trainingSet/data.pos', SentimentType::POSITIVE, 5000);
 
-        static::assertCount(17686, $this->brain->getSentiments());
+        static::assertCount(17686, $this->brain->getWords());
         static::assertEquals(54786, $this->brain->getWordTypeCount(SentimentType::POSITIVE));
         static::assertEquals(54037, $this->brain->getWordTypeCount(SentimentType::NEGATIVE));
         static::assertEquals(5000, $this->brain->getSentenceTypeCount(SentimentType::POSITIVE));
@@ -130,7 +130,7 @@ class BrainTest extends TestCase
         $this->brain->insertTrainingSentence('this good then excellent and', SentimentType::POSITIVE);
         $this->brain->insertTrainingSentence('this bad then rubbish and', SentimentType::NEGATIVE);
 
-        static::assertCount(4, $this->brain->getSentiments());
+        static::assertCount(4, $this->brain->getWords());
         static::assertEquals(2, $this->brain->getWordTypeCount(SentimentType::POSITIVE));
         static::assertEquals(2, $this->brain->getWordTypeCount(SentimentType::NEGATIVE));
         static::assertEquals(1, $this->brain->getSentenceTypeCount(SentimentType::POSITIVE));
