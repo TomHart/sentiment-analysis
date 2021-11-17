@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace TomHart\SentimentAnalysis\Memories;
 
-use JetBrains\PhpStorm\ArrayShape;
 use TomHart\SentimentAnalysis\SentimentType;
 
 /**

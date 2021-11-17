@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace TomHart\SentimentAnalysis\Brain;
+namespace TomHart\SentimentAnalysis\Brain\Traits;
 
 use InvalidArgumentException;
+use TomHart\SentimentAnalysis\Brain\BrainInterface;
 use TomHart\SentimentAnalysis\SentimentType;
 
 /**

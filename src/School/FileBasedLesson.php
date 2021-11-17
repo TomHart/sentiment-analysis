@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace TomHart\SentimentAnalysis\School;
 
-use TomHart\SentimentAnalysis\Analyser\Analyser;
 use TomHart\SentimentAnalysis\Brain\BrainInterface;
-use TomHart\SentimentAnalysis\Exception\InvalidSentimentTypeException;
 use TomHart\SentimentAnalysis\SentimentType;
 use TomHart\SentimentAnalysis\StrUtils;
 

@@ -15,8 +15,11 @@ use TomHart\SentimentAnalysis\SentimentType;
 class AnalysisResult implements JsonSerializable
 {
     private SentimentType $result;
+
     private float $positiveAccuracy;
+
     private float $negativeAccuracy;
+
     private array $workings;
 
     /**

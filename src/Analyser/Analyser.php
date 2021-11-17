@@ -19,7 +19,9 @@ class Analyser implements AnalyserInterface
      * What types of sentiment do we support?
      */
     public const VALID_TYPES = [SentimentType::POSITIVE, SentimentType::NEGATIVE];
+
     protected array $bayesDistrib;
+
     protected array $bayesDifference;
 
     /**
@@ -89,12 +91,12 @@ class Analyser implements AnalyserInterface
 
         if (key($sentimentScores) === SentimentType::POSITIVE->value) {
             $bayesDifference = $sentimentScores[SentimentType::POSITIVE->value];
-            if($sentimentScores[SentimentType::NEGATIVE->value] > 0){
+            if ($sentimentScores[SentimentType::NEGATIVE->value] > 0) {
                 $bayesDifference = $sentimentScores[SentimentType::POSITIVE->value] / $sentimentScores[SentimentType::NEGATIVE->value];
             }
         } else {
             $bayesDifference = $sentimentScores[SentimentType::NEGATIVE->value];
-            if($sentimentScores[SentimentType::POSITIVE->value] > 0){
+            if ($sentimentScores[SentimentType::POSITIVE->value] > 0) {
                 $bayesDifference = $sentimentScores[SentimentType::NEGATIVE->value] / $sentimentScores[SentimentType::POSITIVE->value];
             }
         }
