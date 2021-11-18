@@ -6,7 +6,7 @@ namespace TomHart\SentimentAnalysis\Analyser;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use TomHart\SentimentAnalysis\Brain\Brain;
+use TomHart\SentimentAnalysis\Brain\DefaultBrain;
 use TomHart\SentimentAnalysis\Brain\BrainInterface;
 use TomHart\SentimentAnalysis\Memories\NoopLoader;
 use TomHart\SentimentAnalysis\SentimentType;
@@ -29,7 +29,7 @@ class AnalyserTest extends TestCase
      */
     public function testAnalyzeSentence(): void
     {
-        $brain = $this->createMock(Brain::class);
+        $brain = $this->createMock(DefaultBrain::class);
 
         $brain
             ->expects(static::exactly(6))
@@ -122,13 +122,13 @@ class AnalyserTest extends TestCase
 
     public function testBrainCanBeSet(): void
     {
-        self::assertInstanceOf(AnalyserInterface::class, $this->sut->setBrain(new Brain()));
+        self::assertInstanceOf(AnalyserInterface::class, $this->sut->setBrain(new DefaultBrain()));
     }
 
     protected function setUp(): void
     {
         parent::setUp();
-        $brain = new Brain();
+        $brain = new DefaultBrain();
         $brain->loadMemories(new NoopLoader());
         $this->sut = new Analyser($brain);
     }

@@ -12,17 +12,17 @@ use TomHart\SentimentAnalysis\SentimentType;
  */
 class NoopLoader implements LoaderInterface
 {
-    public function getSentiments(): array
+    public function getWords(): array
     {
         return [];
     }
 
-    public function getWordType(): array
+    public function getWordTypeCount(): array
     {
         return [SentimentType::POSITIVE->value => 0, SentimentType::NEGATIVE->value => 0];
     }
 
-    public function getSentenceType(): array
+    public function getSentenceTypeCount(): array
     {
         return [SentimentType::POSITIVE->value => 0, SentimentType::NEGATIVE->value => 0];
     }

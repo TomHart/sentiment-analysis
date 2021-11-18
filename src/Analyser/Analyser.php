@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TomHart\SentimentAnalysis\Analyser;
 
-use TomHart\SentimentAnalysis\Brain\Brain;
+use TomHart\SentimentAnalysis\Brain\DefaultBrain;
 use TomHart\SentimentAnalysis\Brain\BrainInterface;
 use TomHart\SentimentAnalysis\SentimentType;
 use TomHart\SentimentAnalysis\StrUtils;
@@ -25,7 +25,7 @@ class Analyser implements AnalyserInterface
     protected array $bayesDifference;
 
     /**
-     * @var Brain The Analyzers trained brain.
+     * @var DefaultBrain The Analyzers trained brain.
      */
     private BrainInterface $brain;
 

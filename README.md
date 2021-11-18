@@ -7,13 +7,13 @@ A library to provide a trainable sentiment analyser.
 ```php
 // Create a brain.
 use TomHart\SentimentAnalysis\Analyser\Analyser;
-use TomHart\SentimentAnalysis\Brain\Brain;
+use TomHart\SentimentAnalysis\Brain\DefaultBrain;
 use TomHart\SentimentAnalysis\SentimentType;
 use TomHart\SentimentAnalysis\School\FileBasedLesson;
 
 // Create a lesson and a brain
 $lesson = new FileBasedLesson(realpath(__DIR__ . '/../School/example.data'), SentimentType::POSITIVE);
-$brain = new Brain();
+$brain = new DefaultBrain();
 
 // Train the brain.
 $lesson->teach($brain);

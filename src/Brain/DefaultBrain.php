@@ -10,7 +10,7 @@ use TomHart\SentimentAnalysis\Brain\Traits\DefaultBrainImplementation;
  * Class Brain
  * @package TomHart\SentimentAnalysis
  */
-class Brain extends AbstractBrain
+class DefaultBrain extends AbstractBrain
 {
     use DefaultBrainImplementation;
 }

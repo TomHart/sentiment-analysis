@@ -17,7 +17,7 @@ use TomHart\SentimentAnalysis\SentimentType;
  */
 class BrainTest extends TestCase
 {
-    private Brain $brain;
+    private DefaultBrain $brain;
 
     public function testWordType(): void
     {
@@ -26,7 +26,7 @@ class BrainTest extends TestCase
 
         self::assertEquals(0, $this->brain->getWordTypeCount(SentimentType::POSITIVE));
         self::assertEquals(0, $this->brain->getWordTypeCount(SentimentType::NEGATIVE));
-        self::assertInstanceOf(Brain::class, $this->brain->incrementWordTypeCount(SentimentType::POSITIVE));
+        self::assertInstanceOf(DefaultBrain::class, $this->brain->incrementWordTypeCount(SentimentType::POSITIVE));
         self::assertEquals(1, $this->brain->getWordTypeCount(SentimentType::POSITIVE));
         self::assertEquals(0, $this->brain->getWordTypeCount(SentimentType::NEGATIVE));
         $this->brain->getWordTypeCount(SentimentType::NEUTRAL);
@@ -35,7 +35,7 @@ class BrainTest extends TestCase
     public function testSentiment(): void
     {
         self::assertEmpty($this->brain->getWordUsageCount('abc', SentimentType::POSITIVE));
-        self::assertInstanceOf(Brain::class, $this->brain->addWord('abc', SentimentType::POSITIVE));
+        self::assertInstanceOf(DefaultBrain::class, $this->brain->addWord('abc', SentimentType::POSITIVE));
         self::assertEquals(1, $this->brain->getWordUsageCount('abc', SentimentType::POSITIVE));
     }
 
@@ -48,8 +48,8 @@ class BrainTest extends TestCase
         self::assertEquals(0, $this->brain->getSentenceTypeCount(SentimentType::NEGATIVE));
         self::assertEquals(0, $this->brain->getSentenceTypeCount(SentimentType::POSITIVE));
         self::assertEquals(0, $this->brain->getSentenceTypeCount(SentimentType::NEGATIVE));
-        self::assertInstanceOf(Brain::class, $this->brain->incrementSentenceTypeCount(SentimentType::POSITIVE));
-        self::assertInstanceOf(Brain::class, $this->brain->incrementSentenceTypeCount(SentimentType::NEGATIVE));
+        self::assertInstanceOf(DefaultBrain::class, $this->brain->incrementSentenceTypeCount(SentimentType::POSITIVE));
+        self::assertInstanceOf(DefaultBrain::class, $this->brain->incrementSentenceTypeCount(SentimentType::NEGATIVE));
         self::assertEquals(1, $this->brain->getSentenceTypeCount(SentimentType::POSITIVE));
         self::assertEquals(1, $this->brain->getSentenceTypeCount(SentimentType::NEGATIVE));
         $this->brain->getSentenceTypeCount(SentimentType::NEUTRAL);
@@ -74,21 +74,21 @@ class BrainTest extends TestCase
     public function testSentiments(): void
     {
         self::assertEmpty($this->brain->getWords());
-        self::assertInstanceOf(Brain::class, $this->brain->addWord('word', SentimentType::NEUTRAL));
+        self::assertInstanceOf(DefaultBrain::class, $this->brain->addWord('word', SentimentType::NEUTRAL));
         self::assertCount(1, $this->brain->getWords());
     }
 
     public function testSentenceCount(): void
     {
         self::assertEquals(0, $this->brain->getSentenceCount());
-        self::assertInstanceOf(Brain::class, $this->brain->incrementSentenceTypeCount(SentimentType::POSITIVE));
+        self::assertInstanceOf(DefaultBrain::class, $this->brain->incrementSentenceTypeCount(SentimentType::POSITIVE));
         self::assertEquals(1, $this->brain->getSentenceCount());
     }
 
     public function testGetWordCount(): void
     {
         self::assertEquals(0, $this->brain->getWordCount());
-        self::assertInstanceOf(Brain::class, $this->brain->incrementWordTypeCount(SentimentType::POSITIVE));
+        self::assertInstanceOf(DefaultBrain::class, $this->brain->incrementWordTypeCount(SentimentType::POSITIVE));
         self::assertEquals(1, $this->brain->getWordCount());
     }
 
@@ -146,15 +146,15 @@ class BrainTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->brain = new Brain();
+        $this->brain = new DefaultBrain();
         $this->brain->loadMemories(new NoopLoader());
     }
 
-    public function testExample(): void
+    public function readmeExample(): void
     {
 // Create a lesson and a brain
 $lesson = new FileBasedLesson(realpath(__DIR__ . '/../School/example.data'), SentimentType::POSITIVE);
-$brain = new Brain();
+$brain = new DefaultBrain();
 
 // Train the brain.
 $lesson->teach($brain);

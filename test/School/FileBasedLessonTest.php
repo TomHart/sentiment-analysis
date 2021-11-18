@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TomHart\SentimentAnalysis\Test\School;
 
 use PHPUnit\Framework\TestCase;
-use TomHart\SentimentAnalysis\Brain\Brain;
+use TomHart\SentimentAnalysis\Brain\DefaultBrain;
 use TomHart\SentimentAnalysis\School\FileBasedLesson;
 use TomHart\SentimentAnalysis\SentimentType;
 
@@ -20,7 +20,7 @@ class FileBasedLessonTest extends TestCase
 
     public function testTeach(): void
     {
-        $mockBrain = $this->createMock(Brain::class);
+        $mockBrain = $this->createMock(DefaultBrain::class);
 
         $mockBrain
             ->expects(static::exactly(2))
@@ -60,7 +60,7 @@ class FileBasedLessonTest extends TestCase
 
     public function testStopWordsAreNotTaught(): void
     {
-        $mockBrain = $this->createMock(Brain::class);
+        $mockBrain = $this->createMock(DefaultBrain::class);
 
         $mockBrain
             ->method('getStopWords')

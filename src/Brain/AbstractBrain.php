@@ -147,9 +147,9 @@ abstract class AbstractBrain implements BrainInterface, StopWordsInterface, HasM
      */
     public function loadMemories(LoaderInterface $loader): HasMemoriesInterface
     {
-        $this->words = $loader->getSentiments();
-        $this->sentenceType = self::ensureBothValues($loader->getSentenceType());
-        $this->wordType = self::ensureBothValues($loader->getWordType());
+        $this->words = $loader->getWords();
+        $this->sentenceType = self::ensureBothValues($loader->getSentenceTypeCount());
+        $this->wordType = self::ensureBothValues($loader->getWordTypeCount());
 
         return $this;
     }

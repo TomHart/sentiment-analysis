@@ -28,6 +28,7 @@ class FileSaver implements SaverInterface
      */
     public function save(BrainInterface $brain): bool
     {
+
         return file_put_contents($this->filePath, serialize($brain)) !== false;
     }
 }
