@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace TomHart\SentimentAnalysis\Analyser;
 
-use TomHart\SentimentAnalysis\Brain\Brain;
 use TomHart\SentimentAnalysis\Brain\BrainInterface;
 
 /**

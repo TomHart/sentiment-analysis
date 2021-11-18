@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace TomHart\SentimentAnalysis\Memories;
 
-use JetBrains\PhpStorm\ArrayShape;
 use TomHart\SentimentAnalysis\SentimentType;
 
 /**
@@ -13,20 +12,18 @@ use TomHart\SentimentAnalysis\SentimentType;
  */
 class NoopLoader implements LoaderInterface
 {
-    public function getSentiments(): array
+    public function getWords(): array
     {
         return [];
     }
 
-    #[ArrayShape([SentimentType::POSITIVE => 'int', SentimentType::NEGATIVE => 'int'])]
-    public function getWordType(): array
+    public function getWordTypeCount(): array
     {
-        return [SentimentType::POSITIVE => 0, SentimentType::NEGATIVE => 0];
+        return [SentimentType::POSITIVE->value => 0, SentimentType::NEGATIVE->value => 0];
     }
 
-    #[ArrayShape([SentimentType::POSITIVE => 'int', SentimentType::NEGATIVE => 'int'])]
-    public function getSentenceType(): array
+    public function getSentenceTypeCount(): array
     {
-        return [SentimentType::POSITIVE => 0, SentimentType::NEGATIVE => 0];
+        return [SentimentType::POSITIVE->value => 0, SentimentType::NEGATIVE->value => 0];
     }
 }

@@ -1,0 +1,122 @@
+<?php
+
+declare(strict_types=1);
+
+namespace TomHart\SentimentAnalysis\Brain;
+
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
+use TomHart\SentimentAnalysis\Analyser\Analyser;
+use TomHart\SentimentAnalysis\Memories\NoopLoader;
+use TomHart\SentimentAnalysis\School\FileBasedLesson;
+use TomHart\SentimentAnalysis\SentimentType;
+
+/**
+ * Class BrainTest
+ * @package TomHart\SentimentAnalysis\Test
+ */
+class BrainTest extends TestCase
+{
+    private DefaultBrain $brain;
+
+    public function testWordType(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Word type 'neutral' doesn't exist");
+
+        self::assertEquals(0, $this->brain->getWordTypeCount(SentimentType::POSITIVE));
+        self::assertEquals(0, $this->brain->getWordTypeCount(SentimentType::NEGATIVE));
+        self::assertInstanceOf(DefaultBrain::class, $this->brain->incrementWordTypeCount(SentimentType::POSITIVE));
+        self::assertEquals(1, $this->brain->getWordTypeCount(SentimentType::POSITIVE));
+        self::assertEquals(0, $this->brain->getWordTypeCount(SentimentType::NEGATIVE));
+        $this->brain->getWordTypeCount(SentimentType::NEUTRAL);
+    }
+
+    public function testSentiment(): void
+    {
+        self::assertEmpty($this->brain->getWordUsageCount('abc', SentimentType::POSITIVE));
+        self::assertInstanceOf(DefaultBrain::class, $this->brain->addWord('abc', SentimentType::POSITIVE));
+        self::assertEquals(1, $this->brain->getWordUsageCount('abc', SentimentType::POSITIVE));
+    }
+
+    public function testSentenceType(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Sentence type 'neutral' doesn't exist");
+
+        self::assertEquals(0, $this->brain->getSentenceTypeCount(SentimentType::POSITIVE));
+        self::assertEquals(0, $this->brain->getSentenceTypeCount(SentimentType::NEGATIVE));
+        self::assertEquals(0, $this->brain->getSentenceTypeCount(SentimentType::POSITIVE));
+        self::assertEquals(0, $this->brain->getSentenceTypeCount(SentimentType::NEGATIVE));
+        self::assertInstanceOf(DefaultBrain::class, $this->brain->incrementSentenceTypeCount(SentimentType::POSITIVE));
+        self::assertInstanceOf(DefaultBrain::class, $this->brain->incrementSentenceTypeCount(SentimentType::NEGATIVE));
+        self::assertEquals(1, $this->brain->getSentenceTypeCount(SentimentType::POSITIVE));
+        self::assertEquals(1, $this->brain->getSentenceTypeCount(SentimentType::NEGATIVE));
+        $this->brain->getSentenceTypeCount(SentimentType::NEUTRAL);
+    }
+
+    public function testIncrementSentenceType(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Sentence type 'neutral' doesn't exist");
+
+        $this->brain->incrementSentenceTypeCount(SentimentType::NEUTRAL);
+    }
+
+    public function testIncrementWordType(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Word type 'neutral' doesn't exist");
+
+        $this->brain->incrementWordTypeCount(SentimentType::NEUTRAL);
+    }
+
+    public function testSentiments(): void
+    {
+        self::assertEmpty($this->brain->getWords());
+        self::assertInstanceOf(DefaultBrain::class, $this->brain->addWord('word', SentimentType::NEUTRAL));
+        self::assertCount(1, $this->brain->getWords());
+    }
+
+    public function testSentenceCount(): void
+    {
+        self::assertEquals(0, $this->brain->getSentenceCount());
+        self::assertInstanceOf(DefaultBrain::class, $this->brain->incrementSentenceTypeCount(SentimentType::POSITIVE));
+        self::assertEquals(1, $this->brain->getSentenceCount());
+    }
+
+    public function testGetWordCount(): void
+    {
+        self::assertEquals(0, $this->brain->getWordCount());
+        self::assertInstanceOf(DefaultBrain::class, $this->brain->incrementWordTypeCount(SentimentType::POSITIVE));
+        self::assertEquals(1, $this->brain->getWordCount());
+    }
+
+    public function testAddSentence(): void
+    {
+        static::assertSame($this->brain, $this->brain->addSentence('aaa', SentimentType::NEUTRAL));
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->brain = new DefaultBrain();
+        $this->brain->loadMemories(new NoopLoader());
+    }
+
+    public function readmeExample(): void
+    {
+// Create a lesson and a brain
+$lesson = new FileBasedLesson(realpath(__DIR__ . '/../School/example.data'), SentimentType::POSITIVE);
+$brain = new DefaultBrain();
+
+// Train the brain.
+$lesson->teach($brain);
+
+// Create an analyser.
+$analyser = new Analyser($brain);
+
+// Test it on a sentence.
+$result = $analyser->analyse('The experience I had was good');
+    }
+}

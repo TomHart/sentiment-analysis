@@ -23,8 +23,8 @@ class AnalysisResultTest extends TestCase
             [
                 'result' => SentimentType::POSITIVE,
                 'accuracy' => [
-                    SentimentType::POSITIVE => 1.0,
-                    SentimentType::NEGATIVE => 2.0
+                    SentimentType::POSITIVE->value => 1.0,
+                    SentimentType::NEGATIVE->value => 2.0
                 ]
             ],
             $result->jsonSerialize()

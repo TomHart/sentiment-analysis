@@ -5,47 +5,75 @@ declare(strict_types=1);
 namespace TomHart\SentimentAnalysis\Brain;
 
 use InvalidArgumentException;
-use TomHart\SentimentAnalysis\Analyser\Analyser;
-use TomHart\SentimentAnalysis\Exception\InvalidSentimentTypeException;
+use JetBrains\PhpStorm\Pure;
 use TomHart\SentimentAnalysis\Memories\LoaderInterface;
 use TomHart\SentimentAnalysis\SentimentType;
-use TomHart\SentimentAnalysis\StrUtils;
 
 /**
  * Class Brain
  * @package TomHart\SentimentAnalysis
  */
-abstract class AbstractBrain implements BrainInterface
+abstract class AbstractBrain implements BrainInterface, StopWordsInterface, HasMemoriesInterface
 {
-    protected array $sentiments;
-    protected array $wordType;
-    protected array $sentenceType;
+    /** @var array Words listed how many good/bad times they were used */
+    protected array $words;
+
+    /** @var array How many positive/negative words there are */
+    protected array $wordType = [];
+
+    /** @var array How many positive/negative words there are */
+    protected array $sentenceType = [];
+
+    /** @var array|string[] List of stop words */
     protected array $stopWords = StopWords::ENGLISH;
 
-    /**
-     * @param string $type
-     * @return int
-     */
-    public function getSentenceTypeCount(string $type): int
+    #[Pure]
+    public function __construct()
     {
-        if (!isset($this->sentenceType[$type])) {
-            throw new InvalidArgumentException("Sentence type '$type' doesn't exist");
-        }
-
-        return $this->sentenceType[$type];
+        $this->wordType = self::ensureBothValues([]);
+        $this->sentenceType = self::ensureBothValues([]);
     }
 
     /**
-     * @param string $type
+     * Ensure there's both a positive and negative value.
+     * @param $data
+     * @return array
+     */
+    public static function ensureBothValues($data): array
+    {
+        return array_merge(
+            [
+                SentimentType::POSITIVE->value => 0,
+                SentimentType::NEGATIVE->value => 0
+            ],
+            $data
+        );
+    }
+
+    /**
+     * @param SentimentType $type
      * @return int
      */
-    public function getWordTypeCount(string $type): int
+    public function getSentenceTypeCount(SentimentType $type): int
     {
-        if (!isset($this->wordType[$type])) {
-            throw new InvalidArgumentException("Word type '$type' doesn't exist");
+        if (!isset($this->sentenceType[$type->value])) {
+            throw new InvalidArgumentException("Sentence type '$type->value' doesn't exist");
         }
 
-        return $this->wordType[$type];
+        return $this->sentenceType[$type->value];
+    }
+
+    /**
+     * @param SentimentType $type
+     * @return int
+     */
+    public function getWordTypeCount(SentimentType $type): int
+    {
+        if (!isset($this->wordType[$type->value])) {
+            throw new InvalidArgumentException("Word type '$type->value' doesn't exist");
+        }
+
+        return $this->wordType[$type->value];
     }
 
     /**
@@ -66,105 +94,23 @@ abstract class AbstractBrain implements BrainInterface
 
     /**
      * @param string $word
-     * @param string $wordType
+     * @param SentimentType $wordType
      * @return int
      */
-    public function getSentimentCount(string $word, string $wordType): int
+    public function getWordUsageCount(string $word, SentimentType $wordType): int
     {
-        if (!isset($this->sentiments[$word][$wordType])) {
+        if (!isset($this->words[$word][$wordType->value])) {
             return 0;
         }
-        return $this->sentiments[$word][$wordType]++;
+        return $this->words[$word][$wordType->value]++;
     }
 
     /**
      * @return array
      */
-    public function getSentiments(): array
+    public function getWords(): array
     {
-        return $this->sentiments;
-    }
-
-    /**
-     * @param LoaderInterface $loader
-     * @return $this
-     */
-    public function loadMemories(LoaderInterface $loader): BrainInterface
-    {
-        $this->sentiments = $loader->getSentiments();
-        $this->sentenceType = self::format($loader->getSentenceType());
-        $this->wordType = self::format($loader->getWordType());
-
-        return $this;
-    }
-
-    /**
-     * @param $data
-     * @return array
-     */
-    public static function format($data): array
-    {
-        return array_merge(
-            [
-                SentimentType::POSITIVE => 0,
-                SentimentType::NEGATIVE => 0
-            ],
-            $data
-        );
-    }
-
-    /**
-     * @param string $trainingData
-     * @param string $dataType
-     * @param int $testDataAmount
-     * @return BrainInterface
-     */
-    public function insertTrainingData(string $trainingData, string $dataType, int $testDataAmount): BrainInterface
-    {
-        $amountTracker = 0;
-        $testData = fopen($trainingData, 'rb');
-        while ($sentence = fgets($testData)) {
-            if ($amountTracker >= $testDataAmount && $testDataAmount > 0) {
-                break;
-            }
-
-            $amountTracker++;
-            $this->insertTrainingSentence($sentence, $dataType);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param string $sentence
-     * @param string $dataType
-     * @return BrainInterface
-     */
-    public function insertTrainingSentence(string $sentence, string $dataType): BrainInterface
-    {
-        if (!in_array($dataType, Analyser::VALID_TYPES, true)) {
-            throw new InvalidSentimentTypeException(
-                'Invalid sentiment type encountered: A sentiment can only be negative or positive'
-            );
-        }
-
-        $sentence = trim($sentence);
-
-        $words = StrUtils::splitSentence($sentence);
-
-        $this->incrementSentenceTypeCount($dataType);
-        $this->addSentence($sentence, $dataType);
-
-        foreach ($words as $word) {
-            if (in_array(mb_strtolower($word), $this->stopWords, true)) {
-                continue;
-            }
-
-            $this->incrementWordTypeCount($dataType);
-            $this->addSentiment($word, $dataType);
-        }
-
-        return $this;
+        return $this->words;
     }
 
     /**
@@ -180,7 +126,7 @@ abstract class AbstractBrain implements BrainInterface
      * @param array $stopWords
      * @return $this
      */
-    public function setStopWords(array $stopWords): BrainInterface
+    public function setStopWords(array $stopWords): StopWordsInterface
     {
         $this->stopWords = array_map('mb_strtolower', $stopWords);
         return $this;
@@ -194,5 +140,17 @@ abstract class AbstractBrain implements BrainInterface
     public function isStopWord(string $word): bool
     {
         return in_array(mb_strtolower($word), $this->stopWords, true);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function loadMemories(LoaderInterface $loader): HasMemoriesInterface
+    {
+        $this->words = $loader->getWords();
+        $this->sentenceType = self::ensureBothValues($loader->getSentenceTypeCount());
+        $this->wordType = self::ensureBothValues($loader->getWordTypeCount());
+
+        return $this;
     }
 }

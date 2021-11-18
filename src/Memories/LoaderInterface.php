@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace TomHart\SentimentAnalysis\Memories;
 
-use JetBrains\PhpStorm\ArrayShape;
-use TomHart\SentimentAnalysis\SentimentType;
-
 /**
  * Class LoaderInterface
  * @package TomHart\SentimentAnalysis\Memories
@@ -14,25 +11,23 @@ use TomHart\SentimentAnalysis\SentimentType;
 interface LoaderInterface
 {
     /**
-     * Get the sentiments.
+     * Get the words.
      *
      * @return array
      */
-    public function getSentiments(): array;
+    public function getWords(): array;
 
     /**
      * Get the word type data.
      *
      * @return array
      */
-    #[ArrayShape([SentimentType::POSITIVE => 'int', SentimentType::NEGATIVE => 'int'])]
-    public function getWordType(): array;
+    public function getWordTypeCount(): array;
 
     /**
      * Get the sentence type data.
      *
      * @return array
      */
-    #[ArrayShape([SentimentType::POSITIVE => 'int', SentimentType::NEGATIVE => 'int'])]
-    public function getSentenceType(): array;
+    public function getSentenceTypeCount(): array;
 }

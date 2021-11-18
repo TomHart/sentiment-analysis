@@ -8,9 +8,9 @@ namespace TomHart\SentimentAnalysis;
  * Class SentimentType
  * @package TomHart\SentimentAnalysis
  */
-class SentimentType
+enum SentimentType: string
 {
-    public const POSITIVE = 'positive';
-    public const NEUTRAL = 'neutral';
-    public const NEGATIVE = 'negative';
+    case POSITIVE = 'positive';
+    case NEUTRAL = 'neutral';
+    case NEGATIVE = 'negative';
 }

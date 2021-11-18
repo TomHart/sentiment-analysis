@@ -14,19 +14,23 @@ use TomHart\SentimentAnalysis\SentimentType;
  */
 class AnalysisResult implements JsonSerializable
 {
-    private string $result;
+    private SentimentType $result;
+
     private float $positiveAccuracy;
+
     private float $negativeAccuracy;
+
     private array $workings;
 
     /**
      * AnalysisResult constructor.
-     * @param string|null $result
+     * @param SentimentType|null $result
      * @param float|null $positiveAccuracy
      * @param float|null $negativeAccuracy
+     * @param array|null $workings
      */
     public function __construct(
-        string $result = null,
+        SentimentType $result = null,
         float $positiveAccuracy = null,
         float $negativeAccuracy = null,
         array $workings = null
@@ -49,18 +53,18 @@ class AnalysisResult implements JsonSerializable
     }
 
     /**
-     * @return string
+     * @return SentimentType
      */
-    public function getResult(): string
+    public function getResult(): SentimentType
     {
         return $this->result;
     }
 
     /**
-     * @param string $result
+     * @param SentimentType $result
      * @return AnalysisResult
      */
-    public function setResult(string $result): AnalysisResult
+    public function setResult(SentimentType $result): AnalysisResult
     {
         $this->result = $result;
         return $this;
@@ -129,8 +133,8 @@ class AnalysisResult implements JsonSerializable
         return [
             'result' => $this->result,
             'accuracy' => [
-                SentimentType::POSITIVE => $this->positiveAccuracy,
-                SentimentType::NEGATIVE => $this->negativeAccuracy
+                SentimentType::POSITIVE->value => $this->positiveAccuracy,
+                SentimentType::NEGATIVE->value => $this->negativeAccuracy
             ]
         ];
     }
