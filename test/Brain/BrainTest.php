@@ -97,52 +97,6 @@ class BrainTest extends TestCase
         static::assertSame($this->brain, $this->brain->addSentence('aaa', SentimentType::NEUTRAL));
     }
 
-//    /**
-//     * @throws Exception
-//     */
-//    public function testInvalidSentimentType(): void
-//    {
-//        $this->expectException(InvalidSentimentTypeException::class);
-//        $this->brain->insertTrainingData('trainingSet/data.neg', 'something_else', 1);
-//    }
-//
-//    /**
-//     * @throws Exception
-//     */
-//    public function testTrainingTheBrain(): void
-//    {
-//        $this->brain->insertTrainingData('trainingSet/data.neg', SentimentType::NEGATIVE, 5000);
-//        $this->brain->insertTrainingData('trainingSet/data.pos', SentimentType::POSITIVE, 5000);
-//
-//        static::assertCount(17686, $this->brain->getWords());
-//        static::assertEquals(54786, $this->brain->getWordTypeCount(SentimentType::POSITIVE));
-//        static::assertEquals(54037, $this->brain->getWordTypeCount(SentimentType::NEGATIVE));
-//        static::assertEquals(5000, $this->brain->getSentenceTypeCount(SentimentType::POSITIVE));
-//        static::assertEquals(5000, $this->brain->getSentenceTypeCount(SentimentType::NEGATIVE));
-//        static::assertEquals(108823, $this->brain->getWordCount());
-//        static::assertEquals(10000, $this->brain->getSentenceCount());
-//    }
-//
-//    public function testStopWords(): void
-//    {
-//        $words = ['this', 'then', 'and', 'OF'];
-//        self::assertSame($this->brain, $this->brain->setStopWords($words));
-//        self::assertSame(['this', 'then', 'and', 'of'], $this->brain->getStopWords());
-//        self::assertTrue($this->brain->isStopWord('this'));
-//        self::assertTrue($this->brain->isStopWord('THIS'));
-//
-//        $this->brain->insertTrainingSentence('this good then excellent and', SentimentType::POSITIVE);
-//        $this->brain->insertTrainingSentence('this bad then rubbish and', SentimentType::NEGATIVE);
-//
-//        static::assertCount(4, $this->brain->getWords());
-//        static::assertEquals(2, $this->brain->getWordTypeCount(SentimentType::POSITIVE));
-//        static::assertEquals(2, $this->brain->getWordTypeCount(SentimentType::NEGATIVE));
-//        static::assertEquals(1, $this->brain->getSentenceTypeCount(SentimentType::POSITIVE));
-//        static::assertEquals(1, $this->brain->getSentenceTypeCount(SentimentType::NEGATIVE));
-//        static::assertEquals(4, $this->brain->getWordCount());
-//        static::assertEquals(2, $this->brain->getSentenceCount());
-//    }
-
     protected function setUp(): void
     {
         parent::setUp();
